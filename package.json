@@ -1,0 +1,31 @@
+{
+  "name": "course_server",
+  "version": "1.0.0",
+  "description": "server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roman-Kachura/course_server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roman-Kachura/course_server/issues"
+  },
+  "homepage": "https://github.com/Roman-Kachura/course_server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "node": "^19.1.0",
+    "npm": "^9.1.2"
+  }
+}
