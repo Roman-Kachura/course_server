@@ -10,8 +10,8 @@ router.use((req, res, next) => {
 
 router.post('/registration', [
     check('email', 'Email is empty!').notEmpty(),
-    check('name', 'Name is empty!').notEmpty(),
-    check('password', 'Password must have from 4 to 10 symbols!').isLength({min: 4, max: 10})
+    check('name', 'Name must have from 3 to 10 symbols!').isLength({min: 3, max: 10}),
+    check('password', 'Password must have from 4 to 15 symbols!').isLength({min: 4, max: 15})
 ], usersController.registration);
 router.post('/login', usersController.login);
 router.delete('/logout/:id', authMiddleWare.checkAuthorization, usersController.logout);

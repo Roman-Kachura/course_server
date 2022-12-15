@@ -1,12 +1,3 @@
-// class ErrorService {
-//     setAuthorizationError(req, res) {
-//         res.status(401).json({message: 'You are not authorized!'});
-//         throw 'You are not authorized!';
-//     }
-// }
-//
-// module.exports = new ErrorService();
-
 module.exports = class ErrorService extends Error {
     status;
     errors;

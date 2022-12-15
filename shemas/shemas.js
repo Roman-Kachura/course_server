@@ -4,7 +4,8 @@ const UsersSchema = Schema({
     name: {type: String, require: true},
     email: {type: String, unique: true, require: true},
     password: {type: String, require: true},
-    role: {type: String, require: true}
+    role: {type: String, require: true},
+    photo:{type:String, default:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png'}
 });
 
 const TokenSchema = Schema({

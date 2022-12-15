@@ -8,7 +8,10 @@ const usersRouter = require('./users/usersRouter');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 mongoose.connect(process.env.MONGODB_URL);
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true
+}));
 app.use(express.json());
 app.use('/users', usersRouter);
 app.get('/', (req, res) => {
