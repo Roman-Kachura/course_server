@@ -9,10 +9,14 @@ module.exports = class ErrorService extends Error {
     }
 
     static UnauthorizedError() {
-        return new ErrorService(401, 'User is not authorized!')
+        return new ErrorService(401, 'User is not authorized!');
     }
 
     static BadRequest(message, errors = []) {
         return new ErrorService(400, message, errors);
+    }
+
+    static Forbidden(){
+        return new ErrorService(403, 'You do not have enough authority!');
     }
 }

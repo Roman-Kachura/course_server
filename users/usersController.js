@@ -14,7 +14,7 @@ class UsersController {
                 return next(errorService.BadRequest('Email is not correct!', errors.array()));
             }
             const response = await usersService.registration(name, email, password);
-            return res.json(response);
+            return res.status(200).json(response);
         } catch (e) {
             next(e);
         }
@@ -24,7 +24,7 @@ class UsersController {
         try {
             const {email, password} = req.body;
             const response = await usersService.login(email, password);
-            return res.json(response);
+            return res.status(200).json(response);
         } catch (e) {
             next(e);
         }
@@ -35,7 +35,7 @@ class UsersController {
             const id = req.params.id;
             const token = req.headers.authorization.split(' ')[1];
             const response = await usersService.logout(id, token);
-            return res.json(response);
+            return res.status(200).json(response);
         } catch (e) {
             next(e);
         }
@@ -46,7 +46,17 @@ class UsersController {
             const id = req.params.id;
             const token = req.headers.authorization.split(' ')[1];
             const response = await usersService.remove(id, token);
-            return res.json(response);
+            return res.status(200).json(response);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getUsers(req, res, next) {
+        const currentPage = req.query.page;
+        try {
+            const response = await usersService.getUsers(currentPage);
+            return res.status(200).json(response);
         } catch (e) {
             next(e);
         }

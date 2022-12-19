@@ -53,6 +53,23 @@ class UsersService {
             throw e;
         }
     }
+
+    async getUsers(currentPage = 1) {
+        const getUsersCount = 10;
+        try {
+            const c = await User.find({role:'USER'}).countDocuments();
+            const pagesCount = Math.ceil(c / 10);
+            const skip = (currentPage - 1) * getUsersCount;
+            const users = await User.find({role:'USER'}).skip(skip).limit(getUsersCount);
+            return {
+                currentPage,
+                pagesCount,
+                users:users.map(u => dto.user(u))
+            };
+        } catch (e) {
+            throw e;
+        }
+    }
 }
 
 module.exports = new UsersService();

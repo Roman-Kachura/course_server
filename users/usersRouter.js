@@ -16,5 +16,9 @@ router.post('/registration', [
 router.post('/login', usersController.login);
 router.delete('/logout/:id', authMiddleWare.checkAuthorization, usersController.logout);
 router.delete('/remove/:id', authMiddleWare.checkAuthorization, usersController.remove);
+router.get('/', [
+    authMiddleWare.checkAuthorization,
+    authMiddleWare.checkUserRole
+], usersController.getUsers);
 
 module.exports = router;
