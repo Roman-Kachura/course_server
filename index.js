@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const mongoose = require('mongoose');
 const usersRouter = require('./users/usersRouter');
+const reviewsRouter = require('./reviews/reviewsRouter');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 mongoose.connect(process.env.MONGODB_URL);
 
@@ -14,6 +15,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use('/users', usersRouter);
+app.use('/reviews', reviewsRouter);
 app.get('/', (req, res) => {
     return res.json({message: 'Server works correctly!'})
 });
