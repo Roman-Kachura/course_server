@@ -23,7 +23,7 @@ const ReviewsSchema = Schema({
     rating: {type: Number, require: true},
     image: {type: String, require: true},
     feedbacks: {type: Number, require: true},
-    createAt: {type: Date, require: true},
+    created: {type: Schema.Types.Date, require: true, default: Date.now()},
     hashtags: {type: [String], require: true},
     category: {type: String, require: true},
 });
@@ -32,16 +32,22 @@ const CommentsSchema = Schema({
     authorID: {type: String, require: true},
     reviewID: {type: String, require: true},
     text: {type: String, require: true},
-    createAt: {type: Date, require: true},
+    created: {type: Date, require: true},
+});
+
+const CategoriesSchema = Schema({
+    category: {type: String, require: true}
 });
 
 const User = model('users', UsersSchema);
 const Token = model('token', TokenSchema);
 const Reviews = model('reviews', ReviewsSchema);
 const Comments = model('comments', CommentsSchema);
+const Categories = model('categories', CategoriesSchema);
 
 exports.UsersSchema = UsersSchema;
 exports.Token = Token;
 exports.User = User;
 exports.Reviews = Reviews;
 exports.Comments = Comments;
+exports.Categories = Categories;

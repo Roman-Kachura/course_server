@@ -1,20 +1,34 @@
-const {Reviews, User} = require('../shemas/shemas');
+const {Reviews, User, Categories} = require('../shemas/shemas');
 const dto = require('../dto/dto');
 
 class ReviewsService {
-    async getReviews(category, currentPage = 1) {
+    async getReviews(query) {
         const getReviewsCount = 12;
-        const filter = {}
-        if(category) filter.category = category;
+        const sort = dto.sort(query.sort);
+        const filter = dto.filter(query);
+        const currentPage = +query.currentPage;
+        let value = '';
+        let hashtags = '';
+        if(query.search) value = query.search;
+        if(query.hashtags) hashtags = query.hashtags;
         try {
             const c = await Reviews.find(filter).countDocuments();
-            const pagesCount = Math.ceil(c / getReviewsCount);
+            const pagesCount = +Math.ceil(c / getReviewsCount);
             const skip = (currentPage - 1) * getReviewsCount;
-            const reviews = await Reviews.find(filter).skip(skip).limit(getReviewsCount);
+            const reviews = await Reviews.find(filter).skip(skip).limit(getReviewsCount).sort(sort);
+            const categories = await Categories.find({});
             return {
                 pagesCount,
                 currentPage,
-                reviews: reviews.map(r => dto.review(r))
+                reviews: reviews.map(r => dto.review(r)),
+                categories: categories.map(c => dto.categories(c)),
+                sort: ['DATE UP', 'DATE DOWN', 'RATING UP', 'RATING DOWN'],
+                search: {
+                    sort: filter.sort.toUpperCase() || 'DATE DOWN',
+                    category: filter.category?.toUpperCase() || '',
+                    value,
+                    hashtags
+                }
             }
         } catch (e) {
             throw e;
