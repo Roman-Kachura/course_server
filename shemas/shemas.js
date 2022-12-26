@@ -29,7 +29,11 @@ const ReviewsSchema = Schema({
 });
 
 const CommentsSchema = Schema({
-    authorID: {type: String, require: true},
+    author: {
+        id: {type: String, require: true},
+        name: {type: String, require: true},
+        photo: {type: String, require: true}
+    },
     reviewID: {type: String, require: true},
     text: {type: String, require: true},
     created: {type: Date, require: true},

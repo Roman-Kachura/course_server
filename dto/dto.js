@@ -1,4 +1,5 @@
 const {log} = require("util");
+const {User} = require("../shemas/shemas");
 
 class Dto {
     user(model) {
@@ -29,7 +30,7 @@ class Dto {
     comment(model) {
         return {
             id: model._id,
-            authorID: model.authorID,
+            author: model.author,
             reviewID: model.reviewID,
             text: model.text,
             created: model.created,
