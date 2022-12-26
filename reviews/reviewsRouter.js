@@ -8,6 +8,7 @@ router.use((req, res, next) => {
 });
 
 router.get('/', reviewsController.getReviews);
+router.get('/:id', reviewsController.getReviewsItem);
 
 
 module.exports = router;

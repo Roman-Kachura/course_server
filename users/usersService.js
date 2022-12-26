@@ -60,7 +60,7 @@ class UsersService {
             const c = await User.find({role:'USER'}).countDocuments();
             const pagesCount = Math.ceil(c / 10);
             const skip = (currentPage - 1) * getUsersCount;
-            const users = await User.find({role:'USER'}).skip(skip).limit(getUsersCount);
+            const users = await User.find({}).skip(skip).limit(getUsersCount);
             return {
                 currentPage,
                 pagesCount,
@@ -69,6 +69,10 @@ class UsersService {
         } catch (e) {
             throw e;
         }
+    }
+    async getUser(id){
+        const user = await User.findOne({_id:id});
+        return dto.user(user);
     }
 }
 
