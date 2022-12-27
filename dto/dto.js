@@ -30,7 +30,7 @@ class Dto {
     comment(model) {
         return {
             id: model._id,
-            author: model.author,
+            authorID: model.authorID,
             reviewID: model.reviewID,
             text: model.text,
             created: model.created,

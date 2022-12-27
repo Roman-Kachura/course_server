@@ -1,5 +1,5 @@
 const dto = require('../dto/dto');
-const {Comments} = require("../shemas/shemas");
+const {Comments, User} = require("../shemas/shemas");
 
 class CommentsService {
     async getComments(id) {

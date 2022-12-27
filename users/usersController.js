@@ -61,6 +61,14 @@ class UsersController {
             next(e);
         }
     }
+    async getUser(req,res,next){
+        try {
+            const response = await usersService.getUser(req.params.id);
+            return res.status(200).json(response);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new UsersController();

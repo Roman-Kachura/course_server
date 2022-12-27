@@ -20,5 +20,6 @@ router.get('/', [
     authMiddleWare.checkAuthorization,
     authMiddleWare.checkUserRole
 ], usersController.getUsers);
+router.get('/:id', usersController.getUser);
 
 module.exports = router;

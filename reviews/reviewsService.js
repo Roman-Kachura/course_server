@@ -40,7 +40,7 @@ class ReviewsService {
         try {
             const item = await Reviews.findOne({_id: id});
             const user = await usersService.getUser(item.authorID);
-            return {...dto.review(item), author: user.name};
+            return {...dto.review(item), author:user.name};
         } catch (e) {
             throw e;
         }

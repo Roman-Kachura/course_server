@@ -29,11 +29,7 @@ const ReviewsSchema = Schema({
 });
 
 const CommentsSchema = Schema({
-    author: {
-        id: {type: String, require: true},
-        name: {type: String, require: true},
-        photo: {type: String, require: true}
-    },
+    authorID: {type: String, require: true},
     reviewID: {type: String, require: true},
     text: {type: String, require: true},
     created: {type: Date, require: true},
@@ -42,12 +38,22 @@ const CommentsSchema = Schema({
 const CategoriesSchema = Schema({
     category: {type: String, require: true}
 });
+const RatingObjectType = Schema({
+    id: {type: String, require: true},
+    value: {type: Number, require: true}
+})
+const RatingSchema = Schema({
+    reviewID: {type: String, require: true},
+    ratings: {type: [RatingObjectType], require: true}
+});
+
 
 const User = model('users', UsersSchema);
-const Token = model('token', TokenSchema);
+const Token = model('tokens', TokenSchema);
 const Reviews = model('reviews', ReviewsSchema);
 const Comments = model('comments', CommentsSchema);
 const Categories = model('categories', CategoriesSchema);
+const Rating = model('ratings', RatingSchema);
 
 exports.UsersSchema = UsersSchema;
 exports.Token = Token;
@@ -55,3 +61,4 @@ exports.User = User;
 exports.Reviews = Reviews;
 exports.Comments = Comments;
 exports.Categories = Categories;
+exports.Rating = Rating;
