@@ -3,7 +3,7 @@ const {Token} = require("../shemas/shemas");
 
 class TokenService {
     async generationToken(payload) {
-        return await jwt.sign(payload, process.env.ACCESS_TOKEN, {expiresIn: '1d'});
+        return await jwt.sign(payload, process.env.ACCESS_TOKEN);
     }
 
     async saveToken(id, token) {

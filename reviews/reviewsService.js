@@ -1,6 +1,7 @@
-const {Reviews, Categories} = require('../shemas/shemas');
+const {Reviews, Categories, Rating} = require('../shemas/shemas');
 const usersService = require('../users/usersService');
 const dto = require('../dto/dto');
+
 
 class ReviewsService {
     async getReviews(query) {
@@ -40,7 +41,29 @@ class ReviewsService {
         try {
             const item = await Reviews.findOne({_id: id});
             const user = await usersService.getUser(item.authorID);
-            return {...dto.review(item), author:user.name};
+            return {...dto.review(item), author: user.name};
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async createReview(review) {
+        try {
+            const {title, description, hashtags, image, category, authorID} = await review;
+            const h = hashtags.trim().split(' ');
+            const resolve = await Reviews.create({
+                title,
+                text: description,
+                image,
+                category: category.toLowerCase(),
+                authorID,
+                hashtags: h,
+                feedbacks: 0,
+                rating: 0
+            });
+            resolve.save();
+            const resolve2 = await Rating.create({reviewID: resolve._id});
+            resolve2.save();
         } catch (e) {
             throw e;
         }

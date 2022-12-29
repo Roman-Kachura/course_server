@@ -21,10 +21,14 @@ const ReviewsSchema = Schema({
     authorID: {type: String, require: true},
     text: {type: String, require: true},
     rating: {type: Number, require: true},
-    image: {type: String, require: true},
+    image: {
+        type: String,
+        require: true,
+        default: 'https://st.depositphotos.com/1186248/4970/i/450/depositphotos_49702593-stock-photo-review.jpg'
+    },
     feedbacks: {type: Number, require: true},
     created: {type: Schema.Types.Date, require: true, default: Date.now()},
-    hashtags: {type: [String], require: true},
+    hashtags: {type: [String], require: true, default: []},
     category: {type: String, require: true},
 });
 
@@ -44,9 +48,8 @@ const RatingObjectType = Schema({
 })
 const RatingSchema = Schema({
     reviewID: {type: String, require: true},
-    ratings: {type: [RatingObjectType], require: true}
+    ratings: {type: [RatingObjectType], require: true, default: []}
 });
-
 
 const User = model('users', UsersSchema);
 const Token = model('tokens', TokenSchema);

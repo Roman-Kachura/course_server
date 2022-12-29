@@ -42,12 +42,13 @@ class Dto {
     }
 
     filter(query) {
-        const {category, sort, search, hashtags} = query;
+        const {category, sort, search, hashtags, authorID} = query;
         const filter = {};
         if (category) filter.category = category.toLowerCase();
         if (search) filter.title = RegExp(search, 'gi');
         if (sort) filter.sort = sort.toLowerCase();
         if (hashtags) filter.hashtags = {$all: RegExp(hashtags, 'gi')};
+        if (authorID) filter.authorID = {authorID};
         return filter;
     }
 
