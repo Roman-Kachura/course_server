@@ -57,22 +57,35 @@ class UsersService {
     async getUsers(currentPage = 1) {
         const getUsersCount = 10;
         try {
-            const c = await User.find({role:'USER'}).countDocuments();
+            const c = await User.find({role: 'USER'}).countDocuments();
             const pagesCount = Math.ceil(c / 10);
             const skip = (currentPage - 1) * getUsersCount;
             const users = await User.find({}).skip(skip).limit(getUsersCount);
             return {
                 currentPage,
                 pagesCount,
-                users:users.map(u => dto.user(u))
+                users: users.map(u => dto.user(u))
             };
         } catch (e) {
             throw e;
         }
     }
-    async getUser(id){
-        const user = await User.findOne({_id:id});
+
+    async getUser(id) {
+        const user = await User.findOne({_id: id});
         return dto.user(user);
+    }
+
+    async changeUserSetting(id, name, photo) {
+        try {
+            const update = !!photo
+                ? await User.updateOne({_id: id}, {name, photo})
+                : await User.updateOne({_id: id}, {name});
+            const user = await User.findOne({_id: id});
+            return dto.user(user);
+        } catch (e) {
+            throw e;
+        }
     }
 }
 

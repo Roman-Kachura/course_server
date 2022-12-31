@@ -1,4 +1,4 @@
-const {Reviews, Categories, Rating} = require('../shemas/shemas');
+const {Reviews, Categories, Rating, Comments} = require('../shemas/shemas');
 const usersService = require('../users/usersService');
 const dto = require('../dto/dto');
 
@@ -64,6 +64,17 @@ class ReviewsService {
             resolve.save();
             const resolve2 = await Rating.create({reviewID: resolve._id});
             resolve2.save();
+            return resolve;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async deleteReview(id, authorID) {
+        try {
+            const resolve = await Reviews.deleteOne({_id: id, authorID});
+            await Comments.deleteMany({reviewID: id});
+            return resolve;
         } catch (e) {
             throw e;
         }

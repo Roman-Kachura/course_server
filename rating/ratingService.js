@@ -1,15 +1,17 @@
 const dto = require('../dto/dto');
-const {Rating, Reviews} = require("../shemas/shemas");
+const {Rating, Reviews, User} = require("../shemas/shemas");
 
 class RatingService {
     async getRating(reviewID, userID) {
         try {
-            const rating = await Rating.findOne({reviewID});
-            if (rating) {
-                const isRate = rating.ratings.find(u => u.id === userID);
-                return !!isRate;
+            const ratings = await Rating.findOne({reviewID});
+            if (ratings !== null) {
+                const rate = ratings.ratings.find(u => u.id === userID);
+                if(rate){
+                    return rate.value;
+                }
             }
-            return false;
+            return 0;
         } catch (e) {
             throw e;
         }

@@ -36,7 +36,7 @@ const CommentsSchema = Schema({
     authorID: {type: String, require: true},
     reviewID: {type: String, require: true},
     text: {type: String, require: true},
-    created: {type: Date, require: true},
+    created: {type: Date, require: true, default:Date.now()},
 });
 
 const CategoriesSchema = Schema({

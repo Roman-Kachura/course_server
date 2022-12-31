@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {check} = require('express-validator');
 const reviewsController = require('./reviewsController');
-const {upload} = require('../upload/upload.service');
+const {upload} = require('../upload/uploadService');
 const authMiddleWare = require('../middlewares/authMiddleware');
 
 
@@ -12,6 +12,7 @@ router.use((req, res, next) => {
 
 router.get('/', reviewsController.getReviews);
 router.get('/:id', reviewsController.getReviewsItem);
+router.delete('/:id/:authorID', reviewsController.deleteReview);
 router.post('/uploadfile', [
     upload.single('file'),
     authMiddleWare.checkAuthorization,

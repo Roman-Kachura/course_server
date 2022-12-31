@@ -18,9 +18,9 @@ class Dto {
             title: model.title.toUpperCase(),
             authorID: model.authorID,
             text: model.text,
-            rating: model.rating,
+            rating: +model.rating.toFixed(1),
             image: model.image,
-            feedbacks: model._id,
+            feedbacks: +model.feedbacks,
             hashtags: model.hashtags,
             category: model.category,
             created: model.created
@@ -42,13 +42,13 @@ class Dto {
     }
 
     filter(query) {
-        const {category, sort, search, hashtags, authorID} = query;
+        const {category, sort, search, hashtags, author} = query;
         const filter = {};
         if (category) filter.category = category.toLowerCase();
         if (search) filter.title = RegExp(search, 'gi');
         if (sort) filter.sort = sort.toLowerCase();
         if (hashtags) filter.hashtags = {$all: RegExp(hashtags, 'gi')};
-        if (authorID) filter.authorID = {authorID};
+        if (author) filter.authorID = author;
         return filter;
     }
 

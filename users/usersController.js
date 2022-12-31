@@ -1,6 +1,7 @@
 const usersService = require('./usersService');
 const {validationResult} = require('express-validator');
 const errorService = require('../error/errorService');
+const uploadController = require("../upload/uploadController");
 
 class UsersController {
     async registration(req, res, next) {
@@ -61,10 +62,26 @@ class UsersController {
             next(e);
         }
     }
-    async getUser(req,res,next){
+
+    async getUser(req, res, next) {
         try {
             const response = await usersService.getUser(req.params.id);
             return res.status(200).json(response);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async changeUserSetting(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(errorService.BadRequest('Some error!', errors.array()));
+        }
+
+        try {
+            const image = await uploadController.uploadUserImage(req, res, next);
+            const resolve = await usersService.changeUserSetting(req.body.id, req.body.name, image.url)
+            return res.status(200).json(resolve);
         } catch (e) {
             next(e);
         }
