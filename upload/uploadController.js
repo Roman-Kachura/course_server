@@ -18,7 +18,7 @@ class UploadController {
         }
     }
 
-    async uploadUserImage(req, res, next) {
+    async uploadImageWithoudError(req, res, next) {
         try {
             const {file} = req
             if (!file) return {url: null};

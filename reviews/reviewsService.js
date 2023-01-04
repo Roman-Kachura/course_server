@@ -5,7 +5,7 @@ const dto = require('../dto/dto');
 
 class ReviewsService {
     async getReviews(query) {
-        const getReviewsCount = 12;
+        const getReviewsCount = 10;
         const sort = dto.sort(query.sort);
         const filter = dto.filter(query);
         const currentPage = +query.currentPage;
@@ -18,12 +18,10 @@ class ReviewsService {
             const pagesCount = +Math.ceil(c / getReviewsCount);
             const skip = (currentPage - 1) * getReviewsCount;
             const reviews = await Reviews.find(filter).skip(skip).limit(getReviewsCount).sort(sort);
-            const categories = await Categories.find({});
-            return {
+            const res = {
                 pagesCount,
                 currentPage,
                 reviews: reviews.map(r => dto.review(r)),
-                categories: categories.map(c => dto.categories(c)),
                 sort: ['DATE UP', 'DATE DOWN', 'RATING UP', 'RATING DOWN'],
                 search: {
                     sort: filter.sort.toUpperCase() || 'DATE DOWN',
@@ -32,6 +30,7 @@ class ReviewsService {
                     hashtags
                 }
             }
+            return res;
         } catch (e) {
             throw e;
         }
@@ -49,17 +48,19 @@ class ReviewsService {
 
     async createReview(review) {
         try {
-            const {title, description, hashtags, image, category, authorID} = await review;
+            const {name, product, description, hashtags, image, category, authorID, rating} = await review;
             const h = hashtags.trim().split(' ');
             const resolve = await Reviews.create({
-                title,
+                name,
+                product,
                 text: description,
                 image,
                 category: category.toLowerCase(),
                 authorID,
+                authorRating: +rating,
                 hashtags: h,
                 feedbacks: 0,
-                rating: 0
+                rating: 0,
             });
             resolve.save();
             const resolve2 = await Rating.create({reviewID: resolve._id});
@@ -70,10 +71,36 @@ class ReviewsService {
         }
     }
 
+    async editReview(review) {
+        try {
+            const {name, product, description, hashtags, image, category, rating, id} = await review;
+            const r = await Reviews.findOne({_id: id});
+            const nr = dto.review(r);
+            const img = image ? image : nr.image;
+            const h = hashtags.trim().split(' ');
+            const resolve = await Reviews.updateOne({_id: id}, {
+                name,
+                product,
+                text: description,
+                image: img,
+                category: category.toLowerCase(),
+                authorID: nr.authorID,
+                authorRating: +rating,
+                hashtags: h,
+                feedbacks: 0,
+                rating: 0,
+            });
+            return resolve;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async deleteReview(id, authorID) {
         try {
             const resolve = await Reviews.deleteOne({_id: id, authorID});
             await Comments.deleteMany({reviewID: id});
+            await Rating.deleteMany({reviewID: id});
             return resolve;
         } catch (e) {
             throw e;

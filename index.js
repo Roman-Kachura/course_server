@@ -10,6 +10,7 @@ const commentsRouter = require('./comments/commentsRouter');
 const ratingRouter = require('./rating/ratingRouter');
 const uploadRouter = require('./upload/uploadRouter')
 const categoryRouter = require('./category/categoryRouter');
+const searchRouter = require('./search/searchRouter');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 mongoose.connect(process.env.MONGODB_URL);
 
@@ -24,6 +25,7 @@ app.use('/comments', commentsRouter);
 app.use('/rating', ratingRouter);
 app.use('/upload', uploadRouter);
 app.use('/categories', categoryRouter);
+app.use('/search', searchRouter);
 app.get('/', (req, res) => {
     return res.json({message: 'Server works correctly!'})
 });

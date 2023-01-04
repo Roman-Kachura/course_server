@@ -79,7 +79,7 @@ class UsersController {
         }
 
         try {
-            const image = await uploadController.uploadUserImage(req, res, next);
+            const image = await uploadController.uploadImageWithoudError(req, res, next);
             const resolve = await usersService.changeUserSetting(req.body.id, req.body.name, image.url)
             return res.status(200).json(resolve);
         } catch (e) {

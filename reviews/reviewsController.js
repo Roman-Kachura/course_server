@@ -26,11 +26,25 @@ class ReviewsController {
     async createReview(req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return next(errorService.BadRequest('Errors of registration', errors.array()));
+            return next(errorService.BadRequest('Errors of create review!', errors.array()));
         }
         try {
             const image = await UploadController.uploadImage(req, res, next);
             const review = await reviewsService.createReview({...req.body, image: image.url});
+            return res.status(200).json({review});
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async editReview(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(errorService.BadRequest('Errors of edit review!', errors.array()));
+        }
+        try {
+            const image = await UploadController.uploadImageWithoudError(req, res, next);
+            const review = await reviewsService.editReview({...req.body, image: image.url});
             return res.status(200).json({review});
         } catch (e) {
             next(e);

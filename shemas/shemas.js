@@ -1,15 +1,5 @@
-const {mongoose, Schema, model} = require("mongoose");
+const {Schema, model} = require("mongoose");
 
-const UsersSchema = Schema({
-    name: {type: String, require: true},
-    email: {type: String, unique: true, require: true},
-    password: {type: String, require: true},
-    role: {type: String, require: true},
-    photo: {
-        type: String,
-        default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png'
-    }
-});
 
 const TokenSchema = Schema({
     user: {type: Schema.Types.ObjectId, ref: 'User'},
@@ -17,10 +7,12 @@ const TokenSchema = Schema({
 });
 
 const ReviewsSchema = Schema({
-    title: {type: String, require: true},
+    name: {type: String, require: true},
+    product: {type: String, require: true},
     authorID: {type: String, require: true},
     text: {type: String, require: true},
     rating: {type: Number, require: true},
+    authorRating: {type: Number, require: true},
     image: {
         type: String,
         require: true,
@@ -36,7 +28,7 @@ const CommentsSchema = Schema({
     authorID: {type: String, require: true},
     reviewID: {type: String, require: true},
     text: {type: String, require: true},
-    created: {type: Date, require: true, default:Date.now()},
+    created: {type: Date, require: true, default: Date.now()},
 });
 
 const CategoriesSchema = Schema({
@@ -46,6 +38,18 @@ const RatingObjectType = Schema({
     id: {type: String, require: true},
     value: {type: Number, require: true}
 })
+
+const UsersSchema = Schema({
+    name: {type: String, require: true},
+    email: {type: String, unique: true, require: true},
+    password: {type: String, require: true},
+    rated: {type: [RatingObjectType], require: true, default: []},
+    role: {type: String, require: true},
+    photo: {
+        type: String,
+        default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png'
+    }
+});
 const RatingSchema = Schema({
     reviewID: {type: String, require: true},
     ratings: {type: [RatingObjectType], require: true, default: []}

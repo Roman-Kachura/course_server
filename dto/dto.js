@@ -13,10 +13,12 @@ class Dto {
     }
 
     review(model) {
-        return {
+        const res = {
             id: model._id,
-            title: model.title.toUpperCase(),
+            name: model.name.toUpperCase(),
+            product: model.product.toUpperCase(),
             authorID: model.authorID,
+            authorRating: model.authorRating,
             text: model.text,
             rating: +model.rating.toFixed(1),
             image: model.image,
@@ -25,6 +27,7 @@ class Dto {
             category: model.category,
             created: model.created
         }
+        return res;
     }
 
     comment(model) {
@@ -45,7 +48,7 @@ class Dto {
         const {category, sort, search, hashtags, author} = query;
         const filter = {};
         if (category) filter.category = category.toLowerCase();
-        if (search) filter.title = RegExp(search, 'gi');
+        if (search) filter.name = RegExp(search, 'gi');
         if (sort) filter.sort = sort.toLowerCase();
         if (hashtags) filter.hashtags = {$all: RegExp(hashtags, 'gi')};
         if (author) filter.authorID = author;
@@ -65,6 +68,16 @@ class Dto {
             default:
                 return {created: -1};
         }
+    }
+
+    helpText(value){
+        const filter = {};
+        if(value.charAt(0) === '#'){
+            filter.hashtags = {$all: RegExp(value, 'gi')};
+        } else{
+            filter.name = RegExp(value, 'gi');
+        }
+        return filter;
     }
 }
 

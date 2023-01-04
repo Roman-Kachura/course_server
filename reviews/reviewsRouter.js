@@ -13,13 +13,22 @@ router.use((req, res, next) => {
 router.get('/', reviewsController.getReviews);
 router.get('/:id', reviewsController.getReviewsItem);
 router.delete('/:id/:authorID', reviewsController.deleteReview);
-router.post('/uploadfile', [
+router.post('/create', [
     upload.single('file'),
     authMiddleWare.checkAuthorization,
-    check('title', 'Title length must be greater than 0 and less than 100!').isLength({min: 1, max: 100}),
+    check('name', 'Review Name length must be greater than 0 and less than 100!').isLength({min: 1, max: 100}),
+    check('product', 'Name of product length must be greater than 0 and less than 100!').isLength({min: 1, max: 100}),
     check('category', 'Category is empty!').notEmpty(),
     check('description', 'Description length must be greater than 0 and less than 5000!').isLength({min: 1, max: 5000}),
 ], reviewsController.createReview);
+router.post('/edit', [
+    upload.single('file'),
+    authMiddleWare.checkAuthorization,
+    check('name', 'Review Name length must be greater than 0 and less than 100!').isLength({min: 1, max: 100}),
+    check('product', 'Name of product length must be greater than 0 and less than 100!').isLength({min: 1, max: 100}),
+    check('category', 'Category is empty!').notEmpty(),
+    check('description', 'Description length must be greater than 0 and less than 5000!').isLength({min: 1, max: 5000}),
+], reviewsController.editReview);
 
 
 module.exports = router;
