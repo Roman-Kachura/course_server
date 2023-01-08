@@ -55,6 +55,15 @@ class Dto {
         return filter;
     }
 
+    filterForUserTable(query,reviewsID){
+        const {category, sort} = query;
+        const filter = {};
+        if (category) filter.category = category.toLowerCase();
+        if (reviewsID) filter._id = reviewsID;
+        if (sort) filter.sort = sort.toLowerCase();
+        return filter;
+    }
+
     sort(value) {
         switch (value) {
             case 'DATE UP':
@@ -73,9 +82,9 @@ class Dto {
     helpText(value){
         const filter = {};
         if(value.charAt(0) === '#'){
-            filter.hashtags = {$all: RegExp(value, 'gi')};
+            filter.hashtags = {$all: RegExp(`^${value}`, 'gi')};
         } else{
-            filter.name = RegExp(value, 'gi');
+            filter.name = RegExp(`^${value}`, 'gi');
         }
         return filter;
     }

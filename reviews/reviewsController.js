@@ -55,11 +55,22 @@ class ReviewsController {
         try {
             const {id, authorID} = req.params;
             const resolve = await reviewsService.deleteReview(id, authorID);
-            return res.status(200).json({message:'Review deleted successfully!'});
+            return res.status(200).json({message: 'Review deleted successfully!'});
         } catch (e) {
             next(e);
         }
     }
+
+    async getProfileReviews(req, res, next) {
+        try {
+            const {id} = req.params;
+            const resolve = await reviewsService.getProfileReviews(id, req.query);
+            return res.status(200).json(resolve);
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new ReviewsController();

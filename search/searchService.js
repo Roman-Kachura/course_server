@@ -15,7 +15,7 @@ class SearchService {
                     res.push({id: r._id, name, subject})
                 }
             })
-            const comments = await Comments.find({text: RegExp(value, 'gi')});
+            const comments = await Comments.find({text: RegExp(`^${value}`, 'gi')});
             comments.forEach(c => {
                 if(c){
                     const f = res.find(f => f.id == c.reviewID);

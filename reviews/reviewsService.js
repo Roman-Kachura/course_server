@@ -1,4 +1,4 @@
-const {Reviews, Categories, Rating, Comments} = require('../shemas/shemas');
+const {Reviews, Categories, Rating, Comments, User} = require('../shemas/shemas');
 const usersService = require('../users/usersService');
 const dto = require('../dto/dto');
 
@@ -101,11 +101,37 @@ class ReviewsService {
             const resolve = await Reviews.deleteOne({_id: id, authorID});
             await Comments.deleteMany({reviewID: id});
             await Rating.deleteMany({reviewID: id});
+            await User.updateMany({$all:{rated:{id}}},{$pull:{rated:{id}}})
             return resolve;
         } catch (e) {
             throw e;
         }
     }
+
+    async getProfileReviews(id, query) {
+        const {page} = query;
+        const limit = 10;
+        const skip = (query.page - 1) * limit;
+        const sort = dto.sort(query.sort);
+
+        try {
+            const user = await User.findOne({_id: id});
+            const ratedReviewsID = user.rated.map(r => r.id);
+            const filter = dto.filterForUserTable(query,ratedReviewsID);
+            const count = await Reviews.where(filter).countDocuments();
+            const reviews = await Reviews.where(filter).sort(sort).skip(skip).limit(limit);
+            return {
+                currentPage: +page,
+                pagesCount: Math.ceil(count / limit),
+                reviews: reviews.map(r => dto.review(r)),
+                sort: filter.sort.toUpperCase() || 'DATE DOWN',
+                category: filter.category?.toUpperCase() || '',
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
 }
 
 module.exports = new ReviewsService();
