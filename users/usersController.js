@@ -5,16 +5,19 @@ const uploadController = require("../upload/uploadController");
 
 class UsersController {
     async registration(req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return next(errorService.BadRequest('Errors of registration', errors.array()));
-        }
         try {
-            const {name, email, password} = req.body;
-            if (!(/^[\w]+[\.\-\_]{0,}[\w]+@[\w]+\.[\w]{2,4}/.test(email))) {
-                return next(errorService.BadRequest('Email is not correct!', errors.array()));
-            }
-            const response = await usersService.registration(name, email, password);
+            const {name, email, password, uid} = req.body;
+            const response = await usersService.registration(name, email, password, uid);
+            return res.status(200).json(response);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async authorizationWithSocial(req, res, next) {
+        try {
+            const {displayName, email, photoURL, uid} = req.body;
+            const response = await usersService.social(displayName, email, photoURL, uid);
             return res.status(200).json(response);
         } catch (e) {
             next(e);

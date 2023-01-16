@@ -5,12 +5,30 @@ const tokenService = require('../token/tokenService');
 const errorService = require('../error/errorService');
 
 class UsersService {
-    async registration(name, email, password) {
+    async social(name, email, photo, uid) {
+        try {
+            const candidate = await User.findOne({email, uid});
+            let user;
+            if (candidate) {
+                user = dto.user(candidate);
+            } else {
+                const create = await User.create({name, email, uid, photo, role: 'USER'});
+                user = dto.user(create);
+            }
+            const token = await tokenService.generationToken(user);
+            await tokenService.saveToken(user.id, token);
+            return {user, token};
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async registration(name, email, password, uid) {
         try {
             const candidate = await User.findOne({email});
             if (candidate) return errorService.BadRequest('User with this email is already registered');
             const hash = await bcrypt.hashSync(password, 7);
-            const user = await User.create({name, email, password: hash, role: 'USER'});
+            const user = await User.create({name, email, password: hash, uid, role: 'USER'});
             const payload = dto.user(user);
             const token = await tokenService.generationToken(payload);
             await tokenService.saveToken(payload.id, token);

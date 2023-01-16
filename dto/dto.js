@@ -6,6 +6,7 @@ class Dto {
         return {
             id: model._id,
             name: model.name,
+            uid: model.uid,
             email: model.email,
             role: model.role,
             photo: model.photo

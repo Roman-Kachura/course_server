@@ -9,11 +9,8 @@ router.use((req, res, next) => {
     next();
 });
 
-router.post('/registration', [
-    check('email', 'Email is empty!').notEmpty(),
-    check('name', 'Name must have from 3 to 20 characters!').isLength({min: 3, max: 20}),
-    check('password', 'Password must have from 4 to 15 characters!').isLength({min: 4, max: 15})
-], usersController.registration);
+router.post('/registration', usersController.registration);
+router.post('/social', usersController.authorizationWithSocial);
 router.post('/login', usersController.login);
 router.delete('/logout/:id', authMiddleWare.checkAuthorization, usersController.logout);
 router.delete('/remove/:id', authMiddleWare.checkAuthorization, usersController.remove);

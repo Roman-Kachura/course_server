@@ -42,8 +42,9 @@ const RatingObjectType = Schema({
 
 const UsersSchema = Schema({
     name: {type: String, require: true},
+    uid: {type: String, require: true},
+    password: {type: String, require: false},
     email: {type: String, unique: true, require: true},
-    password: {type: String, require: true},
     rated: {type: [RatingObjectType], require: true, default: []},
     role: {type: String, require: true},
     photo: {
