@@ -71,6 +71,17 @@ class ReviewsController {
         }
     }
 
+    async changeReviewText(req, res, next) {
+        try {
+            const {id} = req.params;
+            const {value, authorID} = req.body;
+            const resolve = await reviewsService.changeReviewText(id, authorID, value);
+            return res.status(200).json(resolve);
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new ReviewsController();

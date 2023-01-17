@@ -13,6 +13,7 @@ router.use((req, res, next) => {
 router.get('/', reviewsController.getReviews);
 router.get('/profile/:id', reviewsController.getProfileReviews);
 router.get('/:id', reviewsController.getReviewsItem);
+router.put('/:id', authMiddleWare.checkAuthorization, reviewsController.changeReviewText);
 router.delete('/:id/:authorID', reviewsController.deleteReview);
 router.post('/create', [
     upload.single('file'),

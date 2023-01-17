@@ -101,7 +101,16 @@ class ReviewsService {
             const resolve = await Reviews.deleteOne({_id: id, authorID});
             await Comments.deleteMany({reviewID: id});
             await Rating.deleteMany({reviewID: id});
-            await User.updateMany({$all:{rated:{id}}},{$pull:{rated:{id}}})
+            await User.updateMany({$all: {rated: {id}}}, {$pull: {rated: {id}}})
+            return resolve;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async changeReviewText(id, authorID, text) {
+        try {
+            const resolve = await Reviews.updateOne({_id: id, authorID}, {text});
             return resolve;
         } catch (e) {
             throw e;
@@ -117,7 +126,7 @@ class ReviewsService {
         try {
             const user = await User.findOne({_id: id});
             const ratedReviewsID = user.rated.map(r => r.id);
-            const filter = dto.filterForUserTable(query,ratedReviewsID);
+            const filter = dto.filterForUserTable(query, ratedReviewsID);
             const count = await Reviews.where(filter).countDocuments();
             const reviews = await Reviews.where(filter).sort(sort).skip(skip).limit(limit);
             return {
