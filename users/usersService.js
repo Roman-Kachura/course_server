@@ -12,7 +12,7 @@ class UsersService {
             if (candidate) {
                 user = dto.user(candidate);
             } else {
-                const create = await User.create({name, email, uid, photo, role: 'USER'});
+                const create = await User.create({name, email, uid, photo, role: 'USER', rated: []});
                 user = dto.user(create);
             }
             const token = await tokenService.generationToken(user);
