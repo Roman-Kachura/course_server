@@ -9,7 +9,7 @@ class SearchService {
             const reviews = await Reviews.find(filter);
 
             reviews.forEach(r => {
-                if(r){
+                if (r) {
                     const name = filter.hashtags ? r.hashtags.find(f => f.indexOf(value) > -1) : r.name;
                     const subject = filter.hashtags ? 'hashtag' : 'title';
                     res.push({id: r._id, name, subject})
@@ -17,12 +17,19 @@ class SearchService {
             })
             const comments = await Comments.find({text: RegExp(`^${value}`, 'gi')});
             comments.forEach(c => {
-                if(c){
+                if (c) {
                     const f = res.find(f => f.id == c.reviewID);
                     if (!f) {
-                        const name = c.text.match(value,'gi').input;
-                        res.push({id: c.reviewID, name, subject: 'comment'})
+                        const name = c.text.match(value, 'gi').input;
+                        res.push({id: c.reviewID, name, subject: 'comment'});
                     }
+                }
+            });
+            const reviewsWithValueInDescription = await Reviews.find({text: RegExp(`${value}`, 'gi')});
+            reviewsWithValueInDescription.forEach(r => {
+                if(value.length > 2){
+                    let name = r.text.split(' ').find(w => w.toLowerCase().indexOf(value.toLowerCase()) > -1);
+                    res.push({id: r._id, name, subject: 'description'});
                 }
             });
             return res;
