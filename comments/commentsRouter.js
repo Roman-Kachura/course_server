@@ -3,6 +3,10 @@ const router = express.Router();
 const {check} = require('express-validator');
 const commentsController = require('./commentsController');
 const authMiddleWare = require("../middlewares/authMiddleware");
+// const WSServer = require('express-ws')(app);
+// const aWss = WSServer.getWss();
+const commentsService = require("./commentsService");
+
 
 router.use((req, res, next) => {
     next();

@@ -12,12 +12,20 @@ const uploadRouter = require('./upload/uploadRouter')
 const categoryRouter = require('./category/categoryRouter');
 const searchRouter = require('./search/searchRouter');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const commentsController = require("./comments/commentsController");
 mongoose.connect(process.env.MONGODB_URL);
+const WSServer = require('express-ws')(app);
+const aWss = WSServer.getWss();
+
 
 app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true
 }));
+app.ws('/comments', (ws, req) => {
+    ws.on('message', (msg) => commentsController.messageHandler(ws,msg));
+});
+app.ws('/comments', commentsRouter);
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/reviews', reviewsRouter);
