@@ -18,7 +18,10 @@ const WSServer = require('express-ws')(app);
 const aWss = WSServer.getWss();
 
 
-app.use(cors({}));
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.ws('/comments', (ws, req) => {
     ws.on('message', (msg) => commentsController.messageHandler(ws,msg));
 });
